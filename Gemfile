@@ -24,6 +24,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 
   gem "rspec", "~> 3.10"
+  gem "rspec-rails"
   gem "standard"
 end
 

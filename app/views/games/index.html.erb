@@ -1,0 +1,11 @@
+<h1 class="font-bold text-4xl">Mines vs Humanity</h1>
+
+<table class="board">
+  <% @game.height.times do |y| %>
+    <tr>
+      <% @game.width.times do |x| %>
+        <%= render_cell(@game.cell(Minesweeper::Coordinate.new(x, y))) %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
