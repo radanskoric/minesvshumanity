@@ -5,6 +5,8 @@ ruby "3.3.3"
 gem "puma", ">= 5.0"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
+# Use SQLite for all infrastructure: https://github.com/oldmoe/litestack/blob/master/WHYLITESTACK.md
+gem "litestack", "~> 0.4.4"
 gem "sqlite3", "~> 1.4"
 
 gem "importmap-rails"

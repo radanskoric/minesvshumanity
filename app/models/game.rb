@@ -4,6 +4,8 @@ class Game < ApplicationRecord
 
   enum status: %i[play win lose]
 
+  broadcasts_refreshes
+
   def self.current
     find_by(status: :play)
   end
