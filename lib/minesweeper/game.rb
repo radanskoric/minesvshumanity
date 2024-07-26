@@ -3,10 +3,14 @@ require_relative "board"
 module Minesweeper
   class Game
     CELL_WITH_NO_ADJACENT_MINES = Board::Empty.new(0)
+    WIN_STATUSES = %i[win lose].freeze
+
+    attr_reader :status
 
     def initialize(board)
       @cells = Array.new(board.height * board.width)
       @board = board
+      @status = :play
     end
 
     def width = @board.width
@@ -14,6 +18,13 @@ module Minesweeper
     def cell(coordinate) = @cells[cell_index(coordinate)]
 
     def reveal(coordinate)
+      return @status if WIN_STATUSES.include?(@status)
+      @status = reveal_cell_and_flood(coordinate)
+    end
+
+    private
+
+    def reveal_cell_and_flood(coordinate)
       index = cell_index(coordinate)
       return :play if @cells[index]
 
@@ -23,8 +34,6 @@ module Minesweeper
       end
       @cells.count(&:nil?) == @board.mines.size ? :win : :play
     end
-
-    private
 
     def cell_index(coordinate)= coordinate.y * @board.width + coordinate.x
 

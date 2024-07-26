@@ -33,18 +33,58 @@ RSpec.describe Game, type: :model do
   end
 
   describe "#to_game_object" do
+    let(:game) { described_class.start_new(5, 3, 2) }
+
     it "returns a game object matching the game" do
-      game_object = described_class.start_new(5, 3, 2).to_game_object
+      game_object = game.to_game_object
       expect(game_object).to be_a(Minesweeper::Game)
       expect(game_object.width).to eq 5
       expect(game_object.height).to eq 3
     end
 
     it "replays the clicks on the game object" do
-      game = described_class.start_new(5, 3, 2)
       game.clicks.create!(x: 0, y: 0)
       game_object = game.to_game_object
       expect(game_object.cell(Minesweeper::Coordinate.new(0 , 0))).to be_present
+    end
+  end
+
+  describe "#reveal!" do
+    subject(:game) do
+      # Create with just two mines to simplify testing.
+      Game.create!(
+        board: Board.create!(
+          width: 10,
+          height: 10,
+          mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
+        )
+      )
+    end
+
+    it "stores the new click" do
+      game.reveal!(x: 2, y: 1)
+      expect(game.clicks.size).to eq 1
+      expect(game.clicks.first.slice(:x, :y)).to eq({ "x" => 2, "y" => 1 })
+    end
+
+    it "keeps status as play when play continues" do
+      game.reveal!(x: 2, y: 1)
+      expect(game.status).to eq "play"
+    end
+
+    it "updates status to lose when game was lost" do
+      game.reveal!(x: 2, y: 2)
+      expect(game.status).to eq "lose"
+    end
+
+    it "updates status to win when game was won" do
+      game.reveal!(x: 5, y: 5)
+      expect(game.status).to eq "win"
+    end
+
+    it "returns a game object" do
+      result = game.reveal!(x: 2, y: 1)
+      expect(result).to be_a(Minesweeper::Game)
     end
   end
 end

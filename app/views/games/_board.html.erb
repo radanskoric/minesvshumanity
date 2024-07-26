@@ -1,16 +1,26 @@
-<table class="board">
-  <% board.height.times do |y| %>
-    <tr>
-      <% board.width.times do |x| %>
-        <% cell = board.cell(Minesweeper::Coordinate.new(x, y)) %>
-        <% if cell %>
-          <td><%= cell_to_character(cell) %></td>
-        <% else %>
-          <td class="cell-hidden">
-            <%= link_to("", reveal_path(model, x, y), data: {turbo_method: :post}) %>
-          </td>
-        <% end %>
-      <% end %>
-    </tr>
+<%= turbo_frame_tag model do %>
+  <% if model.win? %>
+    <h2> You have won! :) </h2>
+  <% elsif model.lose? %>
+    <h2> You have lost! :( </h2>
   <% end %>
-</table>
+
+  <table class="board">
+    <% board.height.times do |y| %>
+      <tr>
+        <% board.width.times do |x| %>
+          <% cell = board.cell(Minesweeper::Coordinate.new(x, y)) %>
+          <% if cell %>
+            <td><%= cell_to_character(cell) %></td>
+          <% else %>
+            <td class="cell-hidden">
+              <% if model.play? %>
+                <%= link_to("", reveal_path(model, x, y), data: {turbo_method: :post}) %>
+              <% end %>
+            </td>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

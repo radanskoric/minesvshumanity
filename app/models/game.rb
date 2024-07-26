@@ -26,4 +26,11 @@ class Game < ApplicationRecord
       clicks.each { |click| game.reveal(click.to_coordinate) }
     end
   end
+
+  def reveal!(x:, y:)
+    clicks.create!(x:, y:)
+    to_game_object.tap do |new_game_object|
+      update!(status: new_game_object.status)
+    end
+  end
 end

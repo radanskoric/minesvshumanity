@@ -14,6 +14,7 @@ RSpec.describe Minesweeper::Game do
       ########
       ########
     BOARD
+    expect(game.status).to eq :play
 
     expect(game.reveal(coord(0, 1))).to eq :play
     expect(ascii_render(game)).to eq <<~BOARD
@@ -54,6 +55,7 @@ RSpec.describe Minesweeper::Game do
       113#4#2_
       __2###2_
     BOARD
+    expect(game.status).to eq :play
 
     expect(game.reveal(coord(4, 2))).to eq :win
     expect(ascii_render(game)).to eq <<~BOARD
@@ -61,15 +63,17 @@ RSpec.describe Minesweeper::Game do
       113#4#2_
       __2#4#2_
     BOARD
+    expect(game.status).to eq :win
   end
 
-  it "allows to play a game and win" do
+  it "allows to play a game and lose" do
     expect(game.reveal(coord(0, 1))).to eq :play
     expect(ascii_render(game)).to eq <<~BOARD
       ########
       1#######
       ########
     BOARD
+    expect(game.status).to eq :play
 
     expect(game.reveal(coord(1, 0))).to eq :lose
     expect(ascii_render(game)).to eq <<~BOARD
@@ -77,5 +81,24 @@ RSpec.describe Minesweeper::Game do
       1#######
       ########
     BOARD
+    expect(game.status).to eq :lose
+  end
+
+  it "ignores further reveals after the game has finished" do
+    expect(game.reveal(coord(1, 0))).to eq :lose
+    expect(ascii_render(game)).to eq <<~BOARD
+      #*######
+      ########
+      ########
+    BOARD
+    expect(game.status).to eq :lose
+
+    expect(game.reveal(coord(0, 0))).to eq :lose
+    expect(ascii_render(game)).to eq <<~BOARD
+      #*######
+      ########
+      ########
+    BOARD
+    expect(game.status).to eq :lose
   end
 end
