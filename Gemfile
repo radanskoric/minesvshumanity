@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.3.3"
+ruby "3.3.4"
 
 gem "puma", ">= 5.0"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
@@ -43,3 +43,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
+
+gem "dockerfile-rails", ">= 1.6", :group => :development
