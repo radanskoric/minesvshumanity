@@ -3,12 +3,14 @@
 
   <%= turbo_frame_tag model do %>
     <% if model.win? %>
-      <h2> You have won! :) </h2>
+      <p class="text-green-600 text-2xl"> You have won! :) The humanity thrives over Mines! </p>
+      <p>(refresh the page to play in the next game)</p>
     <% elsif model.lose? %>
-      <h2> You have lost! :( </h2>
+      <p class="text-red-600 text-2xl"> You have lost! :( The artifical but not intelligent mines have prevailed.</p>
+      <p>(refresh the page to play in the next game)</p>
     <% end %>
 
-    <table class="board">
+    <table class="board mx-auto my-4">
       <% board.height.times do |y| %>
         <tr>
           <% board.width.times do |x| %>
