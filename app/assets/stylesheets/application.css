@@ -1,24 +1,35 @@
 /* Application styles */
 
+:root {
+  --cell-size: 32px;
+}
+
+table.board {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: calc(var(--cell-size) * 30);
+  background-color: #f0f2f2;
+}
+
 table.board td {
   border: 1px solid black;
-  padding: 2px 6px;
-  width: 40px;
-  height: 40px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   text-align: center;
+  font-weight: bold;
 }
 
 table.board td.cell-hidden {
-  background-color: gray;
-  color: gray;
+  background-color: #9b9e9e;
   padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
-table.board .btn-cell, table.board form {
+table.board a {
+  display: inline-block;
   width: 100%;
   height: 100%;
-}
-
-table.board .btn-cell {
-  cursor: pointer;
+  cursor: crosshair;
 }

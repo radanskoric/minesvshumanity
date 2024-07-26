@@ -1,0 +1,16 @@
+<table class="board">
+  <% board.height.times do |y| %>
+    <tr>
+      <% board.width.times do |x| %>
+        <% cell = board.cell(Minesweeper::Coordinate.new(x, y)) %>
+        <% if cell %>
+          <td><%= cell_to_character(cell) %></td>
+        <% else %>
+          <td class="cell-hidden">
+            <%= link_to("", reveal_path(model, x, y), data: {turbo_method: :post}) %>
+          </td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
