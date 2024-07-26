@@ -25,7 +25,11 @@ class Game < ApplicationRecord
 
   def to_game_object
     Minesweeper::Game.new(board.to_game_object).tap do |game|
-      clicks.each { |click| game.reveal(click.to_coordinate) }
+      # We always go to the database to grabe the latest clicks because this way we handle
+      # concurrent multiplayer clicks. This way we are guaranteed to always see a correct seqeuence
+      # of clicks up to a specific click. We might see stale state but we are guaranteed to see
+      # and accurate past state. The database internal locks take care of ensuring this.
+      clicks.ordered.pluck(:x, :y).each { |(x, y)| game.reveal(Minesweeper::Coordinate.new(x, y)) }
     end
   end
 

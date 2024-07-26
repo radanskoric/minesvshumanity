@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
+  subject(:game) do
+    # Create with just two mines to simplify testing.
+    Game.create!(
+      board: Board.create!(
+        width: 10,
+        height: 12,
+        mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
+      )
+    )
+  end
+
   describe ".start_new" do
     it "creates a new game with a board" do
       game = described_class.start_new(20, 10, 15)
@@ -33,34 +44,32 @@ RSpec.describe Game, type: :model do
   end
 
   describe "#to_game_object" do
-    let(:game) { described_class.start_new(5, 3, 2) }
-
     it "returns a game object matching the game" do
       game_object = game.to_game_object
       expect(game_object).to be_a(Minesweeper::Game)
-      expect(game_object.width).to eq 5
-      expect(game_object.height).to eq 3
+      expect(game_object.width).to eq 10
+      expect(game_object.height).to eq 12
     end
 
     it "replays the clicks on the game object" do
-      game.clicks.create!(x: 0, y: 0)
+      game.clicks.create!(x: 1, y: 1)
       game_object = game.to_game_object
-      expect(game_object.cell(Minesweeper::Coordinate.new(0 , 0))).to be_present
+      expect(game_object.cell(Minesweeper::Coordinate.new(1, 1))).to be_present
+    end
+
+    it "is resistant to concurrent clicks" do
+      game.clicks.load # Warm up the cache.
+      Click.create!(game: game, x: 2, y: 1)
+      game.clicks << Click.new(x: 1, y: 1)
+
+      game_object = game.to_game_object
+      # Verify both clicks are recorded on the game object.
+      expect(game_object.cell(Minesweeper::Coordinate.new(1, 1))).to be_present
+      expect(game_object.cell(Minesweeper::Coordinate.new(2, 1))).to be_present
     end
   end
 
   describe "#reveal!" do
-    subject(:game) do
-      # Create with just two mines to simplify testing.
-      Game.create!(
-        board: Board.create!(
-          width: 10,
-          height: 10,
-          mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
-        )
-      )
-    end
-
     it "stores the new click" do
       game.reveal!(x: 2, y: 1)
       expect(game.clicks.size).to eq 1
