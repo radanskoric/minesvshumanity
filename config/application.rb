@@ -17,6 +17,7 @@ module Minesvshumanity
     config.autoload_lib(ignore: %w(assets tasks))
 
     # Configuration for the application, engines, and railties goes here.
+    config.active_record.sqlite3_production_warning=false
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
