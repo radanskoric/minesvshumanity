@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_19_090116) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_26_121713) do
   create_table "boards", force: :cascade do |t|
     t.integer "width"
     t.integer "height"
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_19_090116) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["board_id"], name: "index_games_on_board_id"
+    t.index ["status"], name: "index_games_on_status", unique: true, where: "status = 0"
   end
 
   create_table "mines", force: :cascade do |t|

@@ -22,6 +22,11 @@ RSpec.describe Game, type: :model do
       expect(game.board.mines.size).to eq(15)
       expect(game.clicks).to be_empty
     end
+
+    it "is not possible to start two games at the same time" do
+      described_class.start_new(5, 5, 2)
+      expect { described_class.start_new(5, 5, 2) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
   end
 
   describe ".current" do
