@@ -1,0 +1,32 @@
+<% cache game do %>
+  <%= turbo_frame_tag game do %>
+    <% unless game.play? %>
+      <% if game.win? %>
+        <p class="text-green-600 text-2xl"> Humanity won! :) We thrive over Mines once again! </p>
+      <% elsif game.lose? %>
+        <p class="text-red-600 text-2xl"> Humanity lost. :( The artifical but not intelligent mines have prevailed.</p>
+      <% end %>
+      <p><%= link_to "Return to home page to play in the next game", root_path, class: "text-indigo-600", target: "_top" %></p>
+    <% end%>
+
+    <table class="board mx-auto my-4">
+      <% board = game.to_game_object unless local_assigns.key?(:board) %>
+      <% board.height.times do |y| %>
+        <tr>
+          <% board.width.times do |x| %>
+            <% cell = board.cell(Minesweeper::Coordinate.new(x, y)) %>
+            <% if cell %>
+              <td><%= cell_to_character(cell) %></td>
+            <% else %>
+              <td class="cell-hidden">
+                <% if game.play? %>
+                  <%= link_to("", reveal_path(game, x, y), data: {turbo_method: :post}) %>
+                <% end %>
+              </td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+<% end %>

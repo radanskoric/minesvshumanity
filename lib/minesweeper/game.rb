@@ -3,7 +3,7 @@ require_relative "board"
 module Minesweeper
   class Game
     CELL_WITH_NO_ADJACENT_MINES = Board::Empty.new(0)
-    WIN_STATUSES = %i[win lose].freeze
+    END_STATUSES = %i[win lose].freeze
 
     attr_reader :status
 
@@ -18,7 +18,7 @@ module Minesweeper
     def cell(coordinate) = @cells[cell_index(coordinate)]
 
     def reveal(coordinate)
-      return @status if WIN_STATUSES.include?(@status)
+      return @status if END_STATUSES.include?(@status)
       @status = reveal_cell_and_flood(coordinate)
     end
 

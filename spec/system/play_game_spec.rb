@@ -26,13 +26,26 @@ RSpec.describe "Play the game", type: :system do
     visit root_path
     click_cell(2, 2)
 
-    expect(page).to have_content('You have lost')
+    expect(page).to have_content('Humanity lost')
   end
 
   it "correctly detects when game has been won" do
     visit root_path
     click_cell(5, 5)
 
-    expect(page).to have_content('You have won')
+    expect(page).to have_content('Humanity won')
+  end
+
+  it "allows browsing the history" do
+    visit root_path
+    click_cell(5, 5)
+
+    click_on "view previous games"
+    expect(page).to have_content('Finished games')
+
+    click_on "Game ##{game_with_one_mine.id} (1 clicks): Humanity won"
+    expect(page).to have_content("Game ##{game_with_one_mine.id} (finished)")
+    expect(page).to have_content('Humanity won')
+    expect(page).to have_content('1 1 1')
   end
 end

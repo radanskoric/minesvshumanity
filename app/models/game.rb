@@ -4,6 +4,9 @@ class Game < ApplicationRecord
 
   enum status: %i[play win lose]
 
+  scope :finished, -> { where(status: Minesweeper::Game::END_STATUSES) }
+  scope :ordered, -> { order(id: :desc) }
+
   broadcasts_refreshes
 
   def self.current

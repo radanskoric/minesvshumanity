@@ -1,0 +1,26 @@
+<%= turbo_stream_from @game %>
+
+<p class="text-center text-sm max-w-4xl mx-auto">
+  Classic minesweeper as open multiplayer.
+  There is only one game happening at the same time.
+  Anyone can play it.
+  If we collectively solve it that is one point for <b>Humanity</b>.
+  If any one of us clicks on a mine, that is one point for <b>The Mines</b>.
+</p>
+
+<p class="text-center text-lg max-w-3xl mx-auto">
+  Current result:
+  <% cache "result-cache-on-game-id-#{@game.id}" do %>
+    <span class="font-medium">Humanity <%= Game.win.count %></span>
+    :
+    <span class="font-medium">Mines <%= Game.lose.count %></span>
+  <% end %>
+
+  (<%= link_to "view previous games", games_path, class: "text-indigo-400" %>)
+</p>
+
+<%= render @game %>
+
+<p>
+  Built by <a href="https://radanskoric.com" class="text-indigo-600">Radan Skorić</a>.
+</p>
