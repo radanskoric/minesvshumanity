@@ -4,3 +4,4 @@
 options:
   label:
     fly_launch_runtime: rails
+  yjit: true
