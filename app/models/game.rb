@@ -32,12 +32,19 @@ class Game < ApplicationRecord
       # concurrent multiplayer clicks. This way we are guaranteed to always see a correct seqeuence
       # of clicks up to a specific click. We might see stale state but we are guaranteed to see
       # and accurate past state. The database internal locks take care of ensuring this.
-      clicks.ordered.pluck(:x, :y).each { |(x, y)| game.reveal(Minesweeper::Coordinate.new(x, y)) }
+      clicks.ordered.pluck(:x, :y, :mark_as_mine).each do |(x, y, mark_as_mine)|
+        coord = Minesweeper::Coordinate.new(x, y)
+        if mark_as_mine
+          game.mark(coord)
+        else
+          game.reveal(coord)
+        end
+      end
     end
   end
 
-  def reveal!(x:, y:)
-    clicks.create!(x:, y:)
+  def click!(x:, y:, mark_as_mine: false)
+    clicks.create!(x:, y:, mark_as_mine:)
     to_game_object.tap do |new_game_object|
       update!(status: new_game_object.status)
     end

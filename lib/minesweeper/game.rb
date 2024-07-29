@@ -5,6 +5,10 @@ module Minesweeper
     CELL_WITH_NO_ADJACENT_MINES = Board::Empty.new(0)
     END_STATUSES = %i[win lose].freeze
 
+    class Marker
+      def to_s = "🚩"
+    end
+
     attr_reader :status
 
     def initialize(board)
@@ -17,15 +21,28 @@ module Minesweeper
     def height = @board.height
     def cell(coordinate) = @cells[cell_index(coordinate)]
 
+    def mark(coordinate)
+      @cells[cell_index(coordinate)] ||= Marker.new
+    end
+
     def reveal(coordinate)
       return @status if END_STATUSES.include?(@status)
       @status = reveal_cell_and_flood(coordinate)
+    end
+
+    def mines_left
+      @board.mines.size - @cells.count { |cell| cell.is_a? Marker }
     end
 
     private
 
     def reveal_cell_and_flood(coordinate)
       index = cell_index(coordinate)
+      if @cells[index].is_a? Marker
+        @cells[index] = nil
+        return :play
+      end
+
       return :play if @cells[index]
 
       (@cells[index] = @board.cell(coordinate)).tap do |cell|

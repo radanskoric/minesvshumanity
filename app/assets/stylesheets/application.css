@@ -23,6 +23,7 @@ table.board td.cell-hidden {
   background-color: #9b9e9e;
   padding: 0;
   box-sizing: border-box;
+  font-size: 120%;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }

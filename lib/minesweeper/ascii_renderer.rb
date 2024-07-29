@@ -5,6 +5,7 @@ module Minesweeper
         grid.width.times do |x|
           output.print case cell = grid.cell(Coordinate.new(x, y))
                        when nil then "#"
+                       when Game::Marker then cell.to_s
                        when Board::Mine then "*"
                        else cell.neighbour_mines.zero? ? "_" : cell.neighbour_mines
                        end

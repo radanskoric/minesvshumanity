@@ -101,4 +101,25 @@ RSpec.describe Minesweeper::Game do
     BOARD
     expect(game.status).to eq :lose
   end
+
+  it "allows to mark cells as mines and prevent direct click on them" do
+    game.reveal(coord(0, 0))
+    expect(game.mines_left).to eq 5
+    game.mark(coord(1, 0))
+    expect(ascii_render(game)).to eq <<~BOARD
+      1🚩######
+      ########
+      ########
+    BOARD
+    expect(game.mines_left).to eq 4
+
+    expect(game.reveal(coord(1, 0))).to eq :play
+    expect(ascii_render(game)).to eq <<~BOARD
+      1#######
+      ########
+      ########
+    BOARD
+
+    expect(game.reveal(coord(1, 0))).to eq :lose
+  end
 end

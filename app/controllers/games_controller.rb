@@ -19,8 +19,9 @@ class GamesController < ApplicationController
 
   def update
     x, y = params.require([:x, :y])
+    mark_as_mine = params.fetch(:mark_as_mine, false)
     game = Game.find(params[:id])
-    game_object = game.reveal!(x:, y:)
+    game_object = game.click!(x:, y:, mark_as_mine:)
 
     render partial: 'games/game', locals: { game: game, board: game_object }
   end
