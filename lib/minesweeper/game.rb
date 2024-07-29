@@ -49,7 +49,7 @@ module Minesweeper
         return :lose if cell.is_a?(Board::Mine)
         reveal_neighbours(coordinate) if cell == CELL_WITH_NO_ADJACENT_MINES
       end
-      @cells.count(&:nil?) == @board.mines.size ? :win : :play
+      @cells.count { |cell| cell.nil? || cell.is_a?(Marker) } == @board.mines.size ? :win : :play
     end
 
     def cell_index(coordinate)= coordinate.y * @board.width + coordinate.x
