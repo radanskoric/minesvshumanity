@@ -7,7 +7,7 @@
 <ul>
   <% @games.find_each do |game| %>
     <li class="<%= game.win? ? 'text-green-600' : 'text-red-600' %>">
-      <%= link_to "Game ##{game.id} (#{game.clicks.size} clicks): #{game.win? ? 'Humanity' : 'Mines'} won", game_path(game) %>
+      <%= link_to "Game ##{game.id}: #{game.win? ? 'Humanity' : 'Mines'} won", game_path(game) %>
     </li>
   <% end %>
 </ul>
