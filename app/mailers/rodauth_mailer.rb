@@ -1,16 +1,6 @@
 class RodauthMailer < ApplicationMailer
   default to: -> { @rodauth.email_to }, from: -> { @rodauth.email_from }
 
-  create_verify_account_email do
-    RodauthMailer.verify_account(self.class.configuration_name, account_id, verify_account_key_value)
-  end
-  create_reset_password_email do
-    RodauthMailer.reset_password(self.class.configuration_name, account_id, reset_password_key_value)
-  end
-  create_verify_login_change_email do |_login|
-    RodauthMailer.verify_login_change(self.class.configuration_name, account_id, verify_login_change_key_value)
-  end
-
   def verify_account(name, account_id, key)
     @rodauth = rodauth(name, account_id) { @verify_account_key_value = key }
     @account = @rodauth.rails_account
