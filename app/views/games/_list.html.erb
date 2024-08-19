@@ -1,0 +1,8 @@
+<ul>
+  <% games.find_each do |game| %>
+    <li class="<%= game_color(game) %>">
+      <%= link_to game_title(game), game_path(game) %>
+    </li>
+  <% end %>
+</ul>
+

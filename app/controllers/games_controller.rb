@@ -10,11 +10,27 @@ class GamesController < ApplicationController
   end
 
   def index
-    @games = Game.finished.ordered
+    @games = Game.communal.finished
+  end
+
+  def my
+    rodauth.require_account
+    @games = current_account.games.reverse_by_creation
   end
 
   def show
     @game = Game.find(params[:id])
+  end
+
+  def new
+    rodauth.require_account
+    @game = Game.new
+  end
+
+  def create
+    rodauth.require_account
+    game = Game.start_new(*game_params.values_at(:width, :height, :mines).map(&:to_i), owner: current_account)
+    redirect_to game
   end
 
   def update
@@ -24,5 +40,11 @@ class GamesController < ApplicationController
     game_object = game.click!(x:, y:, mark_as_mine:)
 
     render partial: 'games/game', locals: { game: game, board: game_object }
+  end
+
+  private
+
+  def game_params
+    params.require(:game).permit(:width, :height, :mines)
   end
 end

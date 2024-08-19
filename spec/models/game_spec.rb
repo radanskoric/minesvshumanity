@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
+  fixtures :accounts
+
   subject(:game) do
     # Create with just two mines to simplify testing.
     Game.create!(
@@ -13,6 +15,8 @@ RSpec.describe Game, type: :model do
   end
 
   describe ".start_new" do
+    let(:owner) { accounts(:freddie) }
+
     it "creates a new game with a board" do
       game = described_class.start_new(20, 10, 15)
       expect(game.status).to eq "play"
@@ -23,9 +27,20 @@ RSpec.describe Game, type: :model do
       expect(game.clicks).to be_empty
     end
 
-    it "is not possible to start two games at the same time" do
+    it "is not possible to start two public games at the same time" do
       described_class.start_new(5, 5, 2)
       expect { described_class.start_new(5, 5, 2) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "creates a private game if owner is set" do
+      expect do
+        described_class.start_new(5, 5, 2, owner:)
+      end.to change(owner.games, :count).by(1)
+    end
+
+    it "allows creating a private game while a public one is in play" do
+      described_class.start_new(5, 5, 2)
+      expect { described_class.start_new(5, 5, 2, owner:) }.to change(Game, :count).by(1)
     end
   end
 
@@ -43,8 +58,49 @@ RSpec.describe Game, type: :model do
       expect(current).to eq play_game
     end
 
+    it "ignores private games" do
+      described_class.start_new(5, 5, 2, owner: accounts(:freddie))
+      described_class.start_new(5, 5, 2, owner: accounts(:brian))
+      public_game = described_class.start_new(5, 5, 2)
+      expect(current).to eq public_game
+    end
+
     it "returns nil if it does not exist" do
       expect(current).to be_nil
+    end
+  end
+
+  describe "#finished?" do
+    it "returns true for game in win state" do
+      expect(Game.new(status: :win)).to be_finished
+    end
+
+    it "returns true for game in lose state" do
+      expect(Game.new(status: :lose)).to be_finished
+    end
+
+    it "returns false for game in false state" do
+      expect(Game.new(status: :play)).not_to be_finished
+    end
+  end
+
+  describe "#communal?" do
+    it "returns true for games with no owner" do
+      expect(Game.new(owner: nil)).to be_communal
+    end
+
+    it "returns false for games with an owner" do
+      expect(Game.new(owner: accounts(:freddie))).not_to be_communal
+    end
+  end
+
+  describe "#private?" do
+    it "returns true for games with an owner" do
+      expect(Game.new(owner: accounts(:freddie))).to be_private
+    end
+
+    it "returns false for games with no owner" do
+      expect(Game.new(owner: nil)).not_to be_private
     end
   end
 

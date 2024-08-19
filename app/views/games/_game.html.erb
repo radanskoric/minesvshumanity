@@ -1,13 +1,6 @@
 <% cache game do %>
   <%= turbo_frame_tag game do %>
-    <% unless game.play? %>
-      <% if game.win? %>
-        <p class="text-green-600 text-2xl"> Humanity won! :) We thrive over Mines once again! </p>
-      <% elsif game.lose? %>
-        <p class="text-red-600 text-2xl"> Humanity lost. :( The artifical but not intelligent mines have prevailed.</p>
-      <% end %>
-      <p><%= link_to "Return to home page to play in the next game", root_path, class: "text-indigo-600", target: "_top" %></p>
-    <% end%>
+    <%= game_status_full_message(game) %>
 
     <% board = game.to_game_object unless local_assigns.key?(:board) %>
     <div class= "p-2 mt-4 font-medium" >

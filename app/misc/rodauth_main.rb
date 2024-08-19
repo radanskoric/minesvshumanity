@@ -43,13 +43,21 @@ class RodauthMain < Rodauth::Rails::Auth
     # Store password hash in a column instead of a separate table.
     account_password_hash_column :password_hash
 
+    # Redirect back to the page you were trying to access after creating an account.
+    # See https://github.com/janko/rodauth-rails/discussions/300#discussioncomment-9498003
+    before_create_account { @saved_create_account_redirect = remove_session_value(login_redirect_session_key) }
+    create_account_redirect { @saved_create_account_redirect || super() }
+
     # Set password when creating account instead of when verifying.
     verify_account_set_password? false
 
     # Change some default param keys.
     login_param "email"
     login_confirm_param "email-confirm"
+    login_return_to_requested_location? true
     # password_confirm_param "confirm_password"
+
+    login_label "E-mail"
 
     # Redirect back to originally requested location after authentication.
     # login_return_to_requested_location? true

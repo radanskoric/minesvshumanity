@@ -4,11 +4,4 @@
 
 <h2 class="font-bold text-2xl m-4">Finished games</h1>
 
-<ul>
-  <% @games.find_each do |game| %>
-    <li class="<%= game.win? ? 'text-green-600' : 'text-red-600' %>">
-      <%= link_to "Game ##{game.id}: #{game.win? ? 'Humanity' : 'Mines'} won", game_path(game) %>
-    </li>
-  <% end %>
-</ul>
-
+<%= render "list", games: @games %>

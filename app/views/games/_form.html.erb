@@ -1,0 +1,32 @@
+<%= form_with(model: game, class: "contents") do |form| %>
+  <% if game.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+      <ul>
+        <% game.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5 flex items-center">
+    <%= form.label :width, class: "w-1/2 text-right mr-4" %>
+    <%= form.number_field :width, value: 30, class: "w-20 shadow rounded-md border border-gray-400 outline-none px-3 py-2" %>
+  </div>
+
+  <div class="my-5 flex items-center">
+    <%= form.label :height, class: "w-1/2 text-right mr-4" %>
+    <%= form.number_field :height, value: 16, class: "w-20 shadow rounded-md border border-gray-400 outline-none px-3 py-2" %>
+  </div>
+
+  <div class="my-5 flex items-center">
+    <%= form.label :mines, class: "w-1/2 text-right mr-4" %>
+    <%= form.number_field :mines, value: 99, class: "w-20 shadow rounded-md border border-gray-400 outline-none px-3 py-2" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.submit "Start My Private Game", class: "btn bg-blue-600 text-white" %>
+  </div>
+<% end %>

@@ -11,10 +11,6 @@ RSpec.describe "Play the game", type: :system do
     )
   end
 
-  def click_cell(x, y)
-    within("table.board") { all("tr")[y].all("td")[x].click }
-  end
-
   it "allows creating clicks" do
     visit root_path
     click_cell(1, 1)
@@ -43,7 +39,7 @@ RSpec.describe "Play the game", type: :system do
     click_on "view previous games"
     expect(page).to have_content('Finished games')
 
-    click_on "Game ##{game_with_one_mine.id} (1 clicks): Humanity won"
+    click_on "Game ##{game_with_one_mine.id}: Humanity won"
     expect(page).to have_content("Game ##{game_with_one_mine.id} (finished)")
     expect(page).to have_content('Humanity won')
     expect(page).to have_content('1 1 1')

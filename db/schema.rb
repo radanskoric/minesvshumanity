@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_12_155751) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_16_091004) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -62,8 +62,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_155751) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "owner_id"
     t.index ["board_id"], name: "index_games_on_board_id"
-    t.index ["status"], name: "index_games_on_status", unique: true, where: "status = 0"
+    t.index ["owner_id"], name: "index_games_on_owner_id"
+    t.index ["status"], name: "only_one_public_game", unique: true, where: "status = 0 AND owner_id IS NULL"
   end
 
   create_table "mines", force: :cascade do |t|
@@ -78,6 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_155751) do
   add_foreign_key "account_remember_keys", "accounts", column: "id"
   add_foreign_key "account_verification_keys", "accounts", column: "id"
   add_foreign_key "clicks", "games"
+  add_foreign_key "games", "accounts", column: "owner_id"
   add_foreign_key "games", "boards"
   add_foreign_key "mines", "boards"
 end
