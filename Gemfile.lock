@@ -77,8 +77,12 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    after_commit_everywhere (1.4.0)
+      activerecord (>= 4.2)
+      activesupport
     ast (2.4.2)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.3)
@@ -225,6 +229,21 @@ GEM
       io-console (~> 0.5)
     rexml (3.3.1)
       strscan
+    roda (3.83.0)
+      rack
+    rodauth (2.36.0)
+      roda (>= 2.6.0)
+      sequel (>= 4)
+    rodauth-model (0.2.1)
+      rodauth (~> 2.0)
+    rodauth-rails (1.15.0)
+      bcrypt
+      railties (>= 5.0, < 8)
+      roda (~> 3.76)
+      rodauth (~> 2.36)
+      rodauth-model (~> 0.2)
+      sequel-activerecord_connection (~> 1.1)
+      tilt
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -276,6 +295,12 @@ GEM
     sentry-ruby (5.18.2)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    sequel (5.83.1)
+      bigdecimal
+    sequel-activerecord_connection (1.4.1)
+      activerecord (>= 5.0, < 8)
+      after_commit_everywhere (~> 1.1)
+      sequel (~> 5.38)
     sqlite3 (1.7.3)
       mini_portile2 (~> 2.8.0)
     sqlite3 (1.7.3-aarch64-linux)
@@ -346,6 +371,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.4)
+  rodauth-rails (~> 1.15)
   rspec (~> 3.10)
   rspec-rails
   selenium-webdriver
