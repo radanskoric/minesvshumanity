@@ -1,5 +1,7 @@
 require "spec_helper"
 
+require "timeout"
+
 require "minesweeper/game"
 require "minesweeper/board"
 
@@ -121,5 +123,30 @@ RSpec.describe Minesweeper::Game do
     BOARD
 
     expect(game.reveal(coord(1, 0))).to eq :lose
+  end
+
+  it "will flood over incorrectly placed markers" do
+    game.mark(coord(7, 1))
+    expect(ascii_render(game)).to eq <<~BOARD
+      ########
+      #######🚩
+      ########
+    BOARD
+    game.reveal(coord(7, 0))
+    expect(ascii_render(game)).to eq <<~BOARD
+      ######1_
+      ######2_
+      ######2_
+    BOARD
+  end
+
+  it "works efficiently with huge boards" do
+    game = Minesweeper::Game.new(Minesweeper::Board.new(200, 200, [coord(1, 1)]))
+
+    expect {
+      Timeout.timeout(0.5) do
+        game.reveal(coord(50, 50))
+      end
+    }.not_to raise_error
   end
 end

@@ -37,25 +37,39 @@ module Minesweeper
     private
 
     def reveal_cell_and_flood(coordinate)
-      index = cell_index(coordinate)
-      if @cells[index].is_a? Marker
-        @cells[index] = nil
+      cell = cell(coordinate)
+
+      if cell # cell is marked or revealed
+        set_cell(coordinate, nil) if cell.is_a? Marker
         return :play
       end
 
-      return :play if @cells[index]
+      cell = set_cell(coordinate, @board.cell(coordinate))
+      return :lose if cell.is_a?(Board::Mine)
+      flood_from(coordinate) if cell == CELL_WITH_NO_ADJACENT_MINES
 
-      (@cells[index] = @board.cell(coordinate)).tap do |cell|
-        return :lose if cell.is_a?(Board::Mine)
-        reveal_neighbours(coordinate) if cell == CELL_WITH_NO_ADJACENT_MINES
-      end
-      @cells.count { |cell| cell.nil? || cell.is_a?(Marker) } == @board.mines.size ? :win : :play
+      is_game_won? ? :win : :play
     end
 
+    def is_game_won?
+      @cells.count { |cell| cell.nil? || cell.is_a?(Marker) } == @board.mines.size
+    end
+
+    def set_cell(coordinate, value)= @cells[cell_index(coordinate)] = value
     def cell_index(coordinate)= coordinate.y * @board.width + coordinate.x
 
-    def reveal_neighbours(coordinate)
-      coordinate.neighbours(width, height).each { |n| reveal(n) }
+    def flood_from(start_coordinate)
+      flood_stack = [start_coordinate]
+
+      while (coordinate = flood_stack.pop)
+        coordinate.neighbours(width, height).each do |neighbour|
+          cell = cell(neighbour)
+          if cell.nil? || cell.is_a?(Marker)
+            cell = set_cell(neighbour, @board.cell(neighbour))
+            flood_stack.push(neighbour) if cell == CELL_WITH_NO_ADJACENT_MINES
+          end
+        end
+      end
     end
   end
 end
