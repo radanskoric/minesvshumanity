@@ -67,7 +67,17 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.x.mail_from = %(MinesVsHumanity author <me@radanskoric.com>)
   config.action_mailer.default_url_options = { host: 'minesvshumanity.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'email-smtp.us-east-1.amazonaws.com',
+    port: 587,
+    authentication: :plain,
+    user_name: 'AKIA4RCAOIMGW6BBSNOI',
+    password: ENV["SMTP_PASSWORD"]
+  }
+  config.action_mailer.raise_delivery_errors = true
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
