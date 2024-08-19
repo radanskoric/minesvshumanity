@@ -11,6 +11,8 @@ class RodauthMain < Rodauth::Rails::Auth
     # See the Rodauth documentation for the list of available config options:
     # http://rodauth.jeremyevans.net/documentation.html
 
+    email_from "me@radanskoric.com"
+
     # ==> General
     # Initialize Sequel and have it reuse Active Record's database connection.
     db Sequel.sqlite(extensions: :activerecord_connection, keep_reference: false)
