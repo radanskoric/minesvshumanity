@@ -14,9 +14,9 @@
 <p class="text-center text-lg max-w-3xl mx-auto">
   Current result:
   <% cache "result-cache-on-game-id-#{@game.id}" do %>
-    <span class="font-medium">Humanity <%= Game.win.count %></span>
+    <span class="font-medium">Humanity <%= Game.communal.win.count %></span>
     :
-    <span class="font-medium">Mines <%= Game.lose.count %></span>
+    <span class="font-medium">Mines <%= Game.communal.lose.count %></span>
   <% end %>
 
   (<%= link_to "view previous games", games_path, class: "text-indigo-400" %>)
