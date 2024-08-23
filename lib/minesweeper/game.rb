@@ -9,12 +9,13 @@ module Minesweeper
       def to_s = "🚩"
     end
 
-    attr_reader :status
+    attr_reader :status, :moves_count
 
     def initialize(board)
       @cells = Array.new(board.height * board.width)
       @board = board
       @status = :play
+      @moves_count = 0
     end
 
     def width = @board.width
@@ -22,11 +23,13 @@ module Minesweeper
     def cell(coordinate) = @cells[cell_index(coordinate)]
 
     def mark(coordinate)
+      @moves_count += 1
       @cells[cell_index(coordinate)] ||= Marker.new
     end
 
     def reveal(coordinate)
       return @status if END_STATUSES.include?(@status)
+      @moves_count += 1
       @status = reveal_cell_and_flood(coordinate)
     end
 

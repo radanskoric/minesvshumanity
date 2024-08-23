@@ -4,6 +4,6 @@
 
 @layer components {
   .btn {
-    @apply rounded-full py-3 px-5 inline-block font-medium cursor-pointer;
+    @apply cursor-pointer rounded-full inline-block py-3 px-5 font-medium;
   }
 }

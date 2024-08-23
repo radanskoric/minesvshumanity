@@ -39,7 +39,13 @@ class GamesController < ApplicationController
     game = Game.find(params[:id])
     game_object = game.click!(x:, y:, mark_as_mine:)
 
-    render partial: 'games/game', locals: { game: game, board: game_object }
+    action = turbo_stream.versioned_replace game, partial: "games/game", locals: { game: game, board: game_object, just_finished: game.finished? }
+    Turbo::Streams::BroadcastStreamJob.perform_later game, content: action
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: action }
+      format.html { redirect_to game }
+    end
   end
 
   private

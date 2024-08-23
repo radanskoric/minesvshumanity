@@ -55,6 +55,8 @@ RSpec.describe "Play a private game", type: :system do
     expect(page).to have_content("Game ##{game.id}")
     lose_the_game!(game)
     expect(page).to have_content("You lost.")
+    # No point in reloading a single private game
+    expect(page).to have_no_content('Reloading to new game in')
   end
 
   context "when logged in with existing private games" do
@@ -73,8 +75,8 @@ RSpec.describe "Play a private game", type: :system do
     before do
       visit "/login"
       login_with(email: owner.email, password: "password")
+      expect(page).to have_content("You have been logged in")
     end
-
 
     it "allows browsing existing private games" do
       visit "/games/my"

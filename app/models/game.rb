@@ -10,8 +10,6 @@ class Game < ApplicationRecord
   scope :reverse_by_creation, -> { order(id: :desc) }
   scope :communal, -> { where(owner: nil) }
 
-  broadcasts_refreshes
-
   def self.current
     self.communal.in_play.first
   end
