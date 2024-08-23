@@ -6,4 +6,6 @@
   <%= link_to "My games", my_games_path, class: "text-indigo-600 my-4" %>
 <% end %>
 
+<%= turbo_stream_from @game %>
+
 <%= render @game %>

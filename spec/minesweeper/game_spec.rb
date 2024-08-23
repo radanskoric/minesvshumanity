@@ -149,4 +149,31 @@ RSpec.describe Minesweeper::Game do
       end
     }.not_to raise_error
   end
+
+  describe "moves_count" do
+    it "starts at 0" do
+      expect(game.moves_count).to eq 0
+    end
+
+    it "counts reveals" do
+      game.reveal(coord(0, 1))
+      expect(game.moves_count).to eq 1
+      game.reveal(coord(2, 1))
+      expect(game.moves_count).to eq 2
+    end
+
+    it "counts marks" do
+      game.mark(coord(0, 1))
+      expect(game.moves_count).to eq 1
+      game.mark(coord(2, 1))
+      expect(game.moves_count).to eq 2
+    end
+
+    it "stops counting when game is finished" do
+      expect(game.reveal(coord(1, 0))).to eq :lose
+      expect(game.moves_count).to eq 1
+      game.reveal(coord(2, 1))
+      expect(game.moves_count).to eq 1
+    end
+  end
 end
