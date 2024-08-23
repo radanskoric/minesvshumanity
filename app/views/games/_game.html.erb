@@ -1,9 +1,11 @@
-<% cache game do %>
+<% just_finished = local_assigns.fetch(:just_finished, false) %>
+
+<% cache [game, just_finished] do %>
   <% board = game.to_game_object unless local_assigns.key?(:board) %>
   <%= turbo_frame_tag game, data: {version: board.moves_count} do %>
     <%= game_status_full_message(game) %>
 
-    <% if local_assigns[:just_finished] && game.communal? %>
+    <% if just_finished && game.communal? %>
       <div class= "my-1" data-controller="refresh-game" data-refresh-game-seconds-value="10">
         Reloading to new game in <span class="text-xl font-bold" data-refresh-game-target="countdown">10</span>.
         <button class="rounded-full cursor-pointer p-2 bg-blue-200 hover:bg-blue-300" data-action="click->refresh-game#refreshPage">Refresh Now</button>
