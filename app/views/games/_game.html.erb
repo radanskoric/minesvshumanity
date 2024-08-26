@@ -39,3 +39,7 @@
     </table>
   <% end %>
 <% end %>
+
+<% if game.finished? && rodauth.logged_in? %>
+  <%= link_to "Replay This Game", replay_game_path(game), class: "btn bg-gray-300 hover:bg-gray-400", data: {turbo_method: :post, turbo_frame: "_top"} %>
+<% end %>

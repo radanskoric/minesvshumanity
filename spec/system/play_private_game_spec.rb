@@ -59,7 +59,25 @@ RSpec.describe "Play a private game", type: :system do
     expect(page).to have_no_content('Reloading to new game in')
   end
 
-  context "when logged in with existing private games" do
+  it "allows to replay a communal game privately, after it's finished" do
+    Game.create!(board: Board.create!( width: 10, height: 10, mines: [Mine.new(x: 2, y: 2)]))
+    visit "/login"
+    login_with(email: accounts(:freddie).email, password: "password")
+
+    visit "/"
+    expect(page).not_to have_content("Replay this game")
+
+    click_cell(5, 5)
+    expect(page).to have_content("Humanity won!")
+    expect(page).to have_content("Refresh Now")
+
+    click_on "Replay This Game"
+    expect(page).not_to have_content("Refresh Now")
+    click_cell(5, 5)
+    expect(page).to have_content("You won!")
+  end
+
+  context "with an existing private games" do
     let!(:private_game) do
       Game.create!(
         board: Board.create!(
@@ -72,23 +90,39 @@ RSpec.describe "Play a private game", type: :system do
     end
     let(:owner) { accounts(:freddie) }
 
-    before do
-      visit "/login"
-      login_with(email: owner.email, password: "password")
-      expect(page).to have_content("You have been logged in")
-    end
+    context "when logged in as owner" do
+      before do
+        visit "/login"
+        login_with(email: owner.email, password: "password")
+        expect(page).to have_content("You have been logged in")
+      end
 
-    it "allows browsing existing private games" do
-      visit "/games/my"
+      it "allows browsing existing private games" do
+        visit "/games/my"
 
-      expect(page).to have_content("My Games")
-      expect(page).to have_content("Game ##{private_game.id}: In progress")
+        expect(page).to have_content("My Games")
+        expect(page).to have_content("Game ##{private_game.id}: In progress")
 
-      click_on "Game ##{private_game.id}"
+        click_on "Game ##{private_game.id}"
 
-      expect(page).to have_content("Mines left: 1")
-      click_cell(4, 4)
-      expect(page).to have_content("You won!")
+        expect(page).to have_content("Mines left: 1")
+        click_cell(4, 4)
+        expect(page).to have_content("You won!")
+      end
+
+      it "allows replaying it after its finished" do
+        visit "/games/my"
+        click_on "Game ##{private_game.id}"
+
+        expect(page).to have_content("Mines left: 1")
+        click_cell(2, 2)
+        expect(page).to have_content("You lost.")
+
+        click_on "Replay This Game"
+        expect(page).to have_content("Mines left: 1")
+        click_cell(4, 4)
+        expect(page).to have_content("You won!")
+      end
     end
   end
 end

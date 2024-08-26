@@ -20,6 +20,10 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    if @game.private?
+      rodauth.require_account
+      head :not_found unless @game.owner == current_account
+    end
   end
 
   def new
@@ -45,6 +49,16 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.turbo_stream { render turbo_stream: action }
       format.html { redirect_to game }
+    end
+  end
+
+  def replay
+    rodauth.require_account
+    game = Game.find(params[:id])
+    if game.finished?
+      redirect_to game.replay_for(current_account)
+    else
+      head :forbidden
     end
   end
 

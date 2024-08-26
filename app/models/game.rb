@@ -63,4 +63,9 @@ class Game < ApplicationRecord
       update!(status: new_game_object.status)
     end
   end
+
+  # @param owner [Account] the account to replay the game for as a new private game.
+  def replay_for(owner)
+    Game.create!(board: board, owner:)
+  end
 end

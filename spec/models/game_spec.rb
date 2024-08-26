@@ -169,4 +169,18 @@ RSpec.describe Game, type: :model do
       expect(result).to be_a(Minesweeper::Game)
     end
   end
+
+  describe "#replay_for" do
+    before { game } # make sure it's created
+
+    it "creates a game" do
+      expect { game.replay_for(accounts(:freddie)) }.to change(Game, :count).by(1)
+    end
+
+    it "keeps the same board but sets the new owner" do
+      new_game = game.replay_for(accounts(:freddie))
+      expect(new_game.board).to eq game.board
+      expect(new_game.owner).to eq accounts(:freddie)
+    end
+  end
 end
