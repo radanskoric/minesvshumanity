@@ -14,18 +14,21 @@ class Game < ApplicationRecord
     self.communal.in_play.first
   end
 
-  # @param [Integer] width
-  # @param [Integer] height
-  # @param [Integer] mines
-  # @param [Account] owner, setting this means the game is private.
-  def self.start_new(width, height, mines, owner: nil)
-    game_board = Minesweeper::Board.generate_random(width, height, mines)
+  # @param width [Integer]
+  # @param height [Integer]
+  # @param mines [Integer]
+  # @param fair_start [Boolean] Whether to start with automatic first reveal
+  # @param owner [Account] setting this means the game is private.
+  def self.start_new(width, height, mines, fair_start: false, owner: nil)
+    game_board, first_reveal = Minesweeper::Board.generate_random(width, height, mines, fair_start:)
     board = Board.create!(
       width: game_board.width,
       height: game_board.height,
       mines: game_board.mines.map { |mine| Mine.new(x: mine.x, y: mine.y) }
     )
-    self.create!(board: board, owner:)
+    self.create!(board: board, fair_start:, owner:).tap do |game|
+      game.click!(x: first_reveal.x, y: first_reveal.y) if fair_start
+    end
   end
 
   def finished?
@@ -66,6 +69,11 @@ class Game < ApplicationRecord
 
   # @param owner [Account] the account to replay the game for as a new private game.
   def replay_for(owner)
-    Game.create!(board: board, owner:)
+    Game.create!(board:, owner:, fair_start:).tap do |new_game|
+      if fair_start
+        first_click = clicks.ordered.first
+        new_game.click!(x: first_click.x, y: first_click.y)
+      end
+    end
   end
 end

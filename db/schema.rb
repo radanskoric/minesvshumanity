@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_16_091004) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_26_085644) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_091004) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "owner_id"
+    t.boolean "fair_start", default: false, null: false
     t.index ["board_id"], name: "index_games_on_board_id"
     t.index ["owner_id"], name: "index_games_on_owner_id"
     t.index ["status"], name: "only_one_public_game", unique: true, where: "status = 0 AND owner_id IS NULL"

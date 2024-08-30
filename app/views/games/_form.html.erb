@@ -26,6 +26,11 @@
     <%= form.number_field :mines, value: 99, class: "w-20 shadow rounded-md border border-gray-400 outline-none px-3 py-2" %>
   </div>
 
+  <div class="my-5 flex items-center">
+    <%= form.label :fair_start, class: "w-1/2 text-right mr-4" %>
+    <%= form.check_box :fair_start, class: "shadow rounded-md border border-gray-400 outline-none px-3 py-3" %>
+  </div>
+
   <div class="my-5">
     <%= form.submit "Start My Private Game", class: "btn bg-blue-600 hover:bg-blue-700 text-white" %>
   </div>

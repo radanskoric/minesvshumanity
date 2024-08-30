@@ -1,3 +1,6 @@
+require_relative "board"
+require_relative "game"
+
 module Minesweeper
   AsciiRenderer = Data.define(:grid) do
     def render(output = $stdout)

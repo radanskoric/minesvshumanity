@@ -33,7 +33,11 @@ class GamesController < ApplicationController
 
   def create
     rodauth.require_account
-    game = Game.start_new(*game_params.values_at(:width, :height, :mines).map(&:to_i), owner: current_account)
+    game = Game.start_new(
+      *game_params.values_at(:width, :height, :mines).map(&:to_i),
+      fair_start: ActiveModel::Type::Boolean.new.cast(game_params[:fair_start]),
+      owner: current_account
+    )
     redirect_to game
   end
 
@@ -65,6 +69,6 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    params.require(:game).permit(:width, :height, :mines)
+    @game_params ||= params.require(:game).permit(:width, :height, :mines, :fair_start)
   end
 end

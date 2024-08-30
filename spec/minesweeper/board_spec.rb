@@ -53,7 +53,19 @@ RSpec.describe Minesweeper::Board do
     BOARD
   end
 
-  it "can generate a random board" do
-    expect { described_class.generate_random(3, 2, 1) }.to_not raise_error
+  describe ".generate_random" do
+    it "can generate a random board" do
+      expect { described_class.generate_random(3, 2, 1, fair_start: false) }.to_not raise_error
+    end
+
+    context "with fair_start option" do
+      it "returns a click guaranteed to be a cell with no neighbouring mines" do
+        10.times do
+          board, coord = described_class.generate_random(3, 2, 1, fair_start: true)
+
+          expect(board.cell(coord)).to eq(Minesweeper::Board::Empty.new(0))
+        end
+      end
+    end
   end
 end

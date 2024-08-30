@@ -3,14 +3,13 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
   fixtures :accounts
 
-  subject(:game) do
-    # Create with just two mines to simplify testing.
-    Game.create!(
-      board: Board.create!(
-        width: 10,
-        height: 12,
-        mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
-      )
+  subject(:game) { Game.create!(board:) }
+  let(:board) do
+    # Just two mines to simplify testing.
+    Board.create!(
+      width: 10,
+      height: 12,
+      mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
     )
   end
 
@@ -41,6 +40,19 @@ RSpec.describe Game, type: :model do
     it "allows creating a private game while a public one is in play" do
       described_class.start_new(5, 5, 2)
       expect { described_class.start_new(5, 5, 2, owner:) }.to change(Game, :count).by(1)
+    end
+
+    context "with a fair start flag" do
+      let(:new_game) { described_class.start_new(5, 5, 10, fair_start: true) }
+
+      it "marks the game as fair start" do
+        expect(new_game.fair_start).to be true
+      end
+
+      it "creates a new game with the first click already generated on blank cell" do
+        expect(new_game.clicks.size).to eq 1
+        expect(new_game.status).to eq "play"
+      end
     end
   end
 
@@ -173,14 +185,28 @@ RSpec.describe Game, type: :model do
   describe "#replay_for" do
     before { game } # make sure it's created
 
+    let(:account) { accounts(:freddie) }
+
     it "creates a game" do
       expect { game.replay_for(accounts(:freddie)) }.to change(Game, :count).by(1)
     end
 
     it "keeps the same board but sets the new owner" do
-      new_game = game.replay_for(accounts(:freddie))
+      new_game = game.replay_for(account)
       expect(new_game.board).to eq game.board
-      expect(new_game.owner).to eq accounts(:freddie)
+      expect(new_game.owner).to eq account
+    end
+
+    context "with a fair start game" do
+      let(:fair_start_game) { Game.start_new(5, 5, 2, fair_start: true, owner: account) }
+
+      it "makes the new game fair start with same first click" do
+        new_game = fair_start_game.replay_for(account)
+
+        expect(new_game.clicks.size).to eq 1
+        expect(new_game.clicks.first.slice(:x, :y)).to eq(fair_start_game.clicks.first.slice(:x, :y))
+        expect(new_game.fair_start).to be true
+      end
     end
   end
 end
