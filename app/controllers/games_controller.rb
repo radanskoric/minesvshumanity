@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   def home
     # The game settings are the same as Expert level in Minesweeper
     # on Windows 3.1 to Windows XP , verified on https://www.minesweeper.info/wiki/Windows_Minesweeper
-    @game = (Game.current || Game.start_new(30, 16, 99))
+    @game = (Game.current || Game.start_new(width: 30, height: 16, mines: 99))
   rescue ActiveRecord::RecordNotUnique
     # We will hit this if another app server started the game
     # at the same time.
@@ -34,9 +34,8 @@ class GamesController < ApplicationController
   def create
     rodauth.require_account
     game = Game.start_new(
-      *game_params.values_at(:width, :height, :mines).map(&:to_i),
-      fair_start: ActiveModel::Type::Boolean.new.cast(game_params[:fair_start]),
-      owner: current_account
+      owner: current_account,
+      **game_params.to_h.symbolize_keys
     )
     redirect_to game
   end
@@ -69,6 +68,6 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    @game_params ||= params.require(:game).permit(:width, :height, :mines, :fair_start)
+    params.require(:game).permit(:width, :height, :mines, :fair_start)
   end
 end

@@ -19,7 +19,7 @@ class Game < ApplicationRecord
   # @param mines [Integer]
   # @param fair_start [Boolean] Whether to start with automatic first reveal
   # @param owner [Account] setting this means the game is private.
-  def self.start_new(width, height, mines, fair_start: false, owner: nil)
+  def self.start_new(width:, height:, mines:, fair_start: false, owner: nil)
     game_board, first_reveal = Minesweeper::Board.generate_random(width, height, mines, fair_start:)
     board = Board.create!(
       width: game_board.width,
