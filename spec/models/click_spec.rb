@@ -8,7 +8,7 @@ RSpec.describe Click, type: :model do
   end
 
   it "updates the game's timestamp" do
-    game = Game.start_new(width: 5, height: 3, mines: 2)
+    game = NewGame.create(width: 5, height: 3, mines: 2)
     expect { game.clicks.create!(x: 1, y: 1) }.to change { game.reload.updated_at }
   end
 end

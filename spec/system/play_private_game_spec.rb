@@ -59,6 +59,18 @@ RSpec.describe "Play a private game", type: :system do
     expect(page).to have_no_content('Reloading to new game in')
   end
 
+  it "shows errors if game is invalid" do
+    owner = accounts(:freddie)
+    visit "/games/new"
+    login_with(email: owner.email, password: "password")
+
+    expect(page).to have_content("Create a new private game")
+    fill_in "Width", with: "1000"
+    click_on "Start My Private Game"
+
+    expect(page).to have_content("Width must be less than or equal to 50")
+  end
+
   it "allows to replay a communal game privately, after it's finished" do
     Game.create!(board: Board.create!( width: 10, height: 10, mines: [Mine.new(x: 2, y: 2)]))
     visit "/login"

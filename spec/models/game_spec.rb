@@ -13,67 +13,24 @@ RSpec.describe Game, type: :model do
     )
   end
 
-  describe ".start_new" do
-    let(:owner) { accounts(:freddie) }
-
-    it "creates a new game with a board" do
-      game = described_class.start_new(width: 20, height: 10, mines: 15)
-      expect(game.status).to eq "play"
-      expect(game.board).to be_present
-      expect(game.board.width).to eq 20
-      expect(game.board.height).to eq 10
-      expect(game.board.mines.size).to eq(15)
-      expect(game.clicks).to be_empty
-    end
-
-    it "is not possible to start two public games at the same time" do
-      described_class.start_new(width: 5, height: 5, mines: 2)
-      expect { described_class.start_new(width: 5, height: 5, mines: 2) }.to raise_error(ActiveRecord::RecordNotUnique)
-    end
-
-    it "creates a private game if owner is set" do
-      expect do
-        described_class.start_new(width: 5, height: 5, mines: 2, owner:)
-      end.to change(owner.games, :count).by(1)
-    end
-
-    it "allows creating a private game while a public one is in play" do
-      described_class.start_new(width: 5, height: 5, mines: 2)
-      expect { described_class.start_new(width: 5, height: 5, mines: 2, owner:) }.to change(Game, :count).by(1)
-    end
-
-    context "with a fair start flag" do
-      let(:new_game) { described_class.start_new(width: 5, height: 5, mines: 10, fair_start: true) }
-
-      it "marks the game as fair start" do
-        expect(new_game.fair_start).to be true
-      end
-
-      it "creates a new game with the first click already generated on blank cell" do
-        expect(new_game.clicks.size).to eq 1
-        expect(new_game.status).to eq "play"
-      end
-    end
-  end
-
   describe ".current" do
     subject(:current) { described_class.current }
 
     before do
       # Create games in non play states
-      described_class.start_new(width: 5, height: 5, mines: 2).update!(status: :win)
-      described_class.start_new(width: 5, height: 5, mines: 2).update!(status: :lose)
+      NewGame.create(width: 5, height: 5, mines: 2).update!(status: :win)
+      NewGame.create(width: 5, height: 5, mines: 2).update!(status: :lose)
     end
 
     it "returns the game in play state if it exists" do
-      play_game = described_class.start_new(width: 5, height: 5, mines: 2)
+      play_game = NewGame.create(width: 5, height: 5, mines: 2)
       expect(current).to eq play_game
     end
 
     it "ignores private games" do
-      described_class.start_new(width: 5, height: 5, mines: 2, owner: accounts(:freddie))
-      described_class.start_new(width: 5, height: 5, mines: 2, owner: accounts(:brian))
-      public_game = described_class.start_new(width: 5, height: 5, mines: 2)
+      NewGame.create(width: 5, height: 5, mines: 2, owner: accounts(:freddie))
+      NewGame.create(width: 5, height: 5, mines: 2, owner: accounts(:brian))
+      public_game = NewGame.create(width: 5, height: 5, mines: 2)
       expect(current).to eq public_game
     end
 
@@ -198,7 +155,7 @@ RSpec.describe Game, type: :model do
     end
 
     context "with a fair start game" do
-      let(:fair_start_game) { Game.start_new(width: 5, height: 5, mines: 2, fair_start: true, owner: account) }
+      let(:fair_start_game) { NewGame.create(width: 5, height: 5, mines: 2, fair_start: true, owner: account) }
 
       it "makes the new game fair start with same first click" do
         new_game = fair_start_game.replay_for(account)
