@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe NewGame, type: :model do
-  fixtures :accounts
+  fixtures :accounts, :matches
 
   let(:owner) { accounts(:freddie) }
+  let(:match) { matches(:public) }
 
   it "creates a new game with a board" do
-    game = described_class.new(width: 20, height: 10, mines: 15).save
+    game = described_class.new(width: 20, height: 10, mines: 15, match:).save
     expect(game.status).to eq "play"
     expect(game.board).to be_present
     expect(game.board.width).to eq 20
@@ -42,8 +43,8 @@ RSpec.describe NewGame, type: :model do
   end
 
   it "is not possible to start two public games at the same time" do
-    described_class.new(width: 5, height: 5, mines: 2).save
-    expect { described_class.new(width: 5, height: 5, mines: 2).save }.to raise_error(ActiveRecord::RecordNotUnique)
+    described_class.new(width: 5, height: 5, mines: 2, match:).save
+    expect { described_class.new(width: 5, height: 5, mines: 2, match:).save }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
   it "creates a private game if owner is set" do
@@ -53,12 +54,12 @@ RSpec.describe NewGame, type: :model do
   end
 
   it "allows creating a private game while a public one is in play" do
-    described_class.new(width: 5, height: 5, mines: 2).save
+    described_class.new(width: 5, height: 5, mines: 2, match:).save
     expect { described_class.new(width: 5, height: 5, mines: 2, owner:).save }.to change(Game, :count).by(1)
   end
 
   context "with a fair start flag" do
-    let(:new_game) { described_class.new(width: 5, height: 5, mines: 10, fair_start: true).save }
+    let(:new_game) { described_class.new(width: 5, height: 5, mines: 10, fair_start: true, match:).save }
 
     it "marks the game as fair start" do
       expect(new_game.fair_start).to be true
@@ -78,7 +79,7 @@ RSpec.describe NewGame, type: :model do
 
   describe ".create!" do
     it "creates a new" do
-      expect { described_class.create }.to change(Game, :count).by(1)
+      expect { described_class.create(match:) }.to change(Game, :count).by(1)
     end
   end
 end

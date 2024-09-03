@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Play a private game", type: :system do
-  fixtures :accounts
+  fixtures :matches, :accounts
 
   def login_with(email:, password:)
     fill_in "E-mail", with: email
@@ -72,7 +72,7 @@ RSpec.describe "Play a private game", type: :system do
   end
 
   it "allows to replay a communal game privately, after it's finished" do
-    Game.create!(board: Board.create!( width: 10, height: 10, mines: [Mine.new(x: 2, y: 2)]))
+    Game.create!(board: Board.create!( width: 10, height: 10, mines: [Mine.new(x: 2, y: 2)]), match: matches(:public))
     visit "/login"
     login_with(email: accounts(:freddie).email, password: "password")
 

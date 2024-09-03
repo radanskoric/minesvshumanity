@@ -11,18 +11,24 @@
   Playing instructions: Click on a cell to reveal it, right click to mark it as holding a mine.
 </p>
 
-<p class="text-center text-lg max-w-3xl mx-auto">
-  Current result:
-  <% cache "result-cache-on-game-id-#{@game.id}" do %>
-    <span class="font-medium">Humanity <%= Game.communal.win.count %></span>
-    :
-    <span class="font-medium">Mines <%= Game.communal.lose.count %></span>
-  <% end %>
+<% if @match %>
+  <p class="text-center text-lg max-w-3xl mx-auto">
+    Current result:
+    <% cache "result-cache-on-game-id-#{@game.id}" do %>
+      <span class="font-medium">Humanity <%= @match.wins %></span>
+      :
+      <span class="font-medium">Mines <%= @match.loses %></span>
+    <% end %>
 
-  (<%= link_to "view previous games", games_path, class: "text-indigo-400" %>)
-</p>
+    (<%= link_to "view previous games", games_path, class: "text-indigo-400" %>)
+  </p>
 
-<%= render @game %>
+  <%= render @game %>
+<% else %>
+  <p class="text-center text-lg max-w-3xl mx-auto">
+    No public match currently in progress
+  </p>
+<% end %>
 
 <p class="mt-1">
   Built with

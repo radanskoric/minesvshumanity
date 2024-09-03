@@ -1,13 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "Play the game", type: :system do
+  fixtures :matches
+
   let!(:simple_game) do
     Game.create!(
       board: Board.create!(
         width: 10,
         height: 10,
         mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
-      )
+      ),
+      match: matches(:public)
     )
   end
 
@@ -88,7 +91,7 @@ RSpec.describe "Play the game", type: :system do
     Capybara.using_session "other user" do
       click_on "Refresh Now"
       expect(page).to have_no_content('Humanity lost')
-      mine = Game.current.board.mines.first
+      mine = Match.current.current_game!.board.mines.first
       click_cell(mine.x, mine.y) # mine
       expect(page).to have_content('Humanity lost')
     end

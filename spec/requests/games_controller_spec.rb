@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Games Controller" do
-  fixtures :accounts
+  fixtures :accounts, :matches
 
   let(:account) { accounts(:freddie) }
-  let(:public_game) { Game.create!(board:) }
+  let(:public_game) { Game.create!(board:, match: matches(:public)) }
   let(:private_game) { Game.create!(board:, owner: account) }
   let(:board) do
     Board.create!(

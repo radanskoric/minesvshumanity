@@ -1,18 +1,14 @@
 class Game < ApplicationRecord
   belongs_to :board
-  belongs_to :owner, class_name: "Account", foreign_key: "owner_id", optional: true
   has_many :clicks, dependent: :delete_all
+  belongs_to :owner, class_name: "Account", foreign_key: "owner_id", optional: true
+  belongs_to :match, optional: true
 
   enum status: %i[play win lose]
 
   scope :finished, -> { where(status: Minesweeper::Game::END_STATUSES) }
   scope :in_play, -> { where(status: :play) }
   scope :reverse_by_creation, -> { order(id: :desc) }
-  scope :communal, -> { where(owner: nil) }
-
-  def self.current
-    self.communal.in_play.first
-  end
 
   def finished?
     Minesweeper::Game::END_STATUSES.include?(status.to_sym)
@@ -58,5 +54,14 @@ class Game < ApplicationRecord
         new_game.click!(x: first_click.x, y: first_click.y)
       end
     end
+  end
+
+  def configuration
+    {
+      width: board.width,
+      height: board.height,
+      mines: board.mines.count,
+      fair_start: fair_start
+    }
   end
 end

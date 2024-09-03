@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  fixtures :accounts
+  fixtures :accounts, :matches
 
-  subject(:game) { Game.create!(board:) }
+  subject(:game) { Game.create!(board:, match: matches(:public)) }
   let(:board) do
     # Just two mines to simplify testing.
     Board.create!(
@@ -11,32 +11,6 @@ RSpec.describe Game, type: :model do
       height: 12,
       mines: [Mine.new(x: 2, y: 2), Mine.new(x: 7, y: 7)]
     )
-  end
-
-  describe ".current" do
-    subject(:current) { described_class.current }
-
-    before do
-      # Create games in non play states
-      NewGame.create(width: 5, height: 5, mines: 2).update!(status: :win)
-      NewGame.create(width: 5, height: 5, mines: 2).update!(status: :lose)
-    end
-
-    it "returns the game in play state if it exists" do
-      play_game = NewGame.create(width: 5, height: 5, mines: 2)
-      expect(current).to eq play_game
-    end
-
-    it "ignores private games" do
-      NewGame.create(width: 5, height: 5, mines: 2, owner: accounts(:freddie))
-      NewGame.create(width: 5, height: 5, mines: 2, owner: accounts(:brian))
-      public_game = NewGame.create(width: 5, height: 5, mines: 2)
-      expect(current).to eq public_game
-    end
-
-    it "returns nil if it does not exist" do
-      expect(current).to be_nil
-    end
   end
 
   describe "#finished?" do
