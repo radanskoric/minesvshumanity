@@ -1,11 +1,7 @@
-<p>
-  <%= link_to "Back to home page and current public game", root_path, class: "text-indigo-600" %>
-</p>
-
 <h2 class="font-bold text-2xl m-4">My Games</h1>
 
 <p class="my-4">
-  <%= link_to "Create new private game", new_game_path, class: "text-indigo-600" %>
+  <%= link_to "Create a new private game", new_game_path, class: "btn text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600" %>
 </p>
 
 <%= render "list", games: @games %>

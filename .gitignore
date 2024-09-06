@@ -34,4 +34,4 @@
 /db/**/*.sqlite3
 /db/**/*.sqlite3-*
 # Ignore downloaded copy of production database.
-production.sqlite3
+production.sqlite3*

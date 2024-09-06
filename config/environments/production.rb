@@ -67,7 +67,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.x.mail_from = %(MinesVsHumanity author <me@radanskoric.com>)
+  config.x.mail_from = %(MinesVsHumanity creator <me@radanskoric.com>)
   config.action_mailer.default_url_options = { host: 'minesvshumanity.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {

@@ -1,18 +1,20 @@
-<%= form_with url: rodauth.remember_path, method: :post, data: { turbo: false }, class: "w-full max-w-sm" do |form| %>
-  <fieldset class="mb-6 space-y-2">
-    <div class="flex items-center space-x-2">
-      <%= form.radio_button rodauth.remember_param, rodauth.remember_remember_param_value, id: "remember-remember", class: "" %>
-      <%= form.label "remember-remember", rodauth.remember_remember_label, class: "text-sm" %>
-    </div>
-    <div class="flex items-center space-x-2">
-      <%= form.radio_button rodauth.remember_param, rodauth.remember_forget_param_value, id: "remember-forget", class: "" %>
-      <%= form.label "remember-forget", rodauth.remember_forget_label, class: "text-sm" %>
-    </div>
-    <div class="flex items-center space-x-2">
-      <%= form.radio_button rodauth.remember_param, rodauth.remember_disable_param_value, id: "remember-disable", class: "" %>
-      <%= form.label "remember-disable", rodauth.remember_disable_label, class: "text-sm" %>
-    </div>
-  </fieldset>
+<div class="flex-1 flex items-center justify-center p-4">
+  <%= form_with url: rodauth.remember_path, method: :post, data: { turbo: false }, class: "w-full max-w-sm" do |form| %>
+    <fieldset class="mb-6 space-y-2">
+      <div class="flex items-center space-x-2">
+        <%= form.radio_button rodauth.remember_param, rodauth.remember_remember_param_value, id: "remember-remember", class: "" %>
+        <%= form.label "remember-remember", rodauth.remember_remember_label, class: "text-sm" %>
+      </div>
+      <div class="flex items-center space-x-2">
+        <%= form.radio_button rodauth.remember_param, rodauth.remember_forget_param_value, id: "remember-forget", class: "" %>
+        <%= form.label "remember-forget", rodauth.remember_forget_label, class: "text-sm" %>
+      </div>
+      <div class="flex items-center space-x-2">
+        <%= form.radio_button rodauth.remember_param, rodauth.remember_disable_param_value, id: "remember-disable", class: "" %>
+        <%= form.label "remember-disable", rodauth.remember_disable_label, class: "text-sm" %>
+      </div>
+    </fieldset>
 
-  <%= form.submit rodauth.remember_button, class: "btn w-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 " %>
-<% end %>
+    <%= form.submit rodauth.remember_button, class: "btn w-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 " %>
+  <% end %>
+<div>

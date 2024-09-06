@@ -1,11 +1,13 @@
 class GamesController < ApplicationController
   def home
+    @first_public = Match.communal.finished.first
     @match = Match.current
     @game = @match.current_game! if @match
   end
 
   def index
-    @games = Match.current.games.finished
+    @match = Match.current
+    @previous = Match.communal.finished
   end
 
   def my

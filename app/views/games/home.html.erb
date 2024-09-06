@@ -1,18 +1,23 @@
 <%= turbo_stream_from @game %>
 
-<p class="text-left text-sm max-w-4xl mx-auto my-1">
+<p class="text-left text-m max-w-4xl mx-auto my-1">
   Classic minesweeper as open multiplayer.
   There is only one game happening at the same time.
   Anyone can play it.
   If we collectively solve it that is one point for <b>Humanity</b>.
   If any one of us clicks on a mine, that is one point for <b>The Mines</b>.
+  <% if @first_public %>
+    We're now on the second round. The <b>first round</b> finished with a <b class="text-red-800">complete defeat of Humanity</b>. Read about it
+    <%= link_to "here", @first_public, class: "text-indigo-600" %>.
+  <% end %>
+  The new round features a fair start: games start with a starting area revealed.
 </p>
 <p class="text-left text-sm max-w-4xl mx-auto my-1">
   Playing instructions: Click on a cell to reveal it, right click to mark it as holding a mine.
 </p>
 
 <% if @match %>
-  <p class="text-center text-lg max-w-3xl mx-auto">
+  <p class="text-center text-lg max-w-3xl mx-auto mt-4">
     Current result:
     <% cache "result-cache-on-game-id-#{@game.id}" do %>
       <span class="font-medium">Humanity <%= @match.wins %></span>
@@ -30,12 +35,3 @@
   </p>
 <% end %>
 
-<p class="mt-1">
-  Built with
-  <a href="https://hotwire.dev" class="text-indigo-600">Hotwire</a>
-  and
-  <a href="https://rubyonrails.org" class="text-indigo-600">Ruby on Rails</a>
-  by
-  <a href="https://radanskoric.com" class="text-indigo-600">Radan Skorić</a>
-  (explained in detail <a href="https://radanskoric.com/experiments/multiplayer-minesweeper-with-rails-and-hotwire" class="text-indigo-600">in this article</a>).
-</p>

@@ -1,8 +1,11 @@
 class Match < ApplicationRecord
+  FIRST_PUBLIC_MATCH_ID = 1 # I know, magic constant, it will do for now.
+
   has_many :games
   belongs_to :owner, class_name: "Account", foreign_key: "owner_id", optional: true
 
   scope :active, -> { where(finished: false) }
+  scope :finished, -> { where(finished: true) }
   scope :communal, -> { where(owner: nil) }
 
   def self.current
@@ -31,6 +34,10 @@ class Match < ApplicationRecord
 
   def loses
     games.lose.count
+  end
+
+  def first_public?
+    self.id == FIRST_PUBLIC_MATCH_ID
   end
 
   private

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Minesvshumanity</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
@@ -16,10 +17,25 @@
     <script defer data-domain="minesvshumanity.com" src="https://plausible.io/js/script.js"></script>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-2 px-5 text-center font-sans">
-      <h1 class="font-bold text-4xl m-4">Mines vs Humanity</h1>
 
+  <body>
+    <nav class="bg-teal-800 p-2">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+          <h1 class="text-white font-bold text-xl mr-4"><%= link_to "Mines vs Humanity", root_path %></h1>
+          <% if rodauth.logged_in? %>
+            <%= link_to "My Games", my_games_path, class: "btn text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600" %>
+          <% end %>
+        </div>
+        <% if rodauth.logged_in? %>
+          <%= render "rodauth/logout_button" %>
+        <% else %>
+          <%= link_to rodauth.login_button, rodauth.login_path, class: "btn text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600" %>
+        <% end %>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-2 px-5 text-center font-sans">
        <% if notice %>
          <div class="alert alert-success"><%= notice %></div>
        <% end %>
@@ -28,6 +44,18 @@
        <% end %>
 
       <%= yield %>
+
+      <div class="mt-4 border-t pt-2">
+        Built with
+        <a href="https://hotwire.dev" class="text-indigo-600">Hotwire</a>
+        and
+        <a href="https://rubyonrails.org" class="text-indigo-600">Ruby on Rails</a>
+        by
+        <a href="https://radanskoric.com" class="text-indigo-600">Radan Skorić</a>
+        (explained in detail <a href="https://radanskoric.com/experiments/multiplayer-minesweeper-with-rails-and-hotwire" class="text-indigo-600">in this article</a>)
+        |
+        <%= link_to "Privacy policy", privacy_path, class: "text-indigo-600" %>
+      </div>
     </main>
   </body>
 </html>

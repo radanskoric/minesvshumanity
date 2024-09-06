@@ -1,0 +1,39 @@
+<p class="text-center text-lg max-w-3xl mx-auto">
+  <% if match.finished? %>
+    Final result:
+  <% else %>
+    Current result:
+  <% end %>
+  <span class="font-medium">Humanity <%= match.wins %></span>
+  :
+  <span class="font-medium">Mines <%= match.loses %></span>
+</p>
+
+<% if match.first_public? %>
+  <div class="text-left text-m max-w-4xl mx-auto my-1">
+    <p class="my-2">
+      The first match between Humanity and The Mines finished with
+      a devastating defeat for Humanity!
+    </p>
+
+    <p class="my-2">
+      But careful inspection revealed that the Mines didn't play fair!
+    </p>
+
+    <p class="my-2">
+      On each new game, the first click of Humanity had to be a guess. We had <b>no clue</b> where the mines were. But they <b>always knew</b> where we were!
+    </p>
+
+    <p class="my-2">
+      The standard Expert mode board is 30x16 with 99 mines. That means 20.6% of the board are mines. In the little under 12k games played in this round Humanity lost on the first click 15.8%. We managed a bit better than chance, using our Humanity! But, we lost 53.8% of the games in the first 5 clicks. Mines rigged it.
+    </p>
+
+    <p class="my-2">
+      That's why the next round is played with a fair start! The system automatically performs the first click on a cell with no neighbouring mines. Head over to the <%= link_to "home page", root_path, class: "text-indigo-600" %> to play the next round!
+    </p>
+  </div>
+<% end %>
+
+<h2 class="font-bold text-2xl m-4">Games history</h1>
+
+<%= render "games/list", games: match.games %>

@@ -6,7 +6,9 @@ RSpec.describe "Play a private game", type: :system do
   def login_with(email:, password:)
     fill_in "E-mail", with: email
     fill_in "Password", with: password
-    click_on "Login"
+    within "main" do
+      click_on "Login"
+    end
   end
 
   def create_a_private_game!

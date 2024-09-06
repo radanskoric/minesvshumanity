@@ -1,11 +1,13 @@
-<%= form_with url: rodauth.close_account_path, method: :post, data: { turbo: false }, class: "w-full max-w-sm" do |form| %>
-  <% if rodauth.close_account_requires_password? %>
-    <div class="mb-6">
-      <%= form.label "password", rodauth.password_label, class: "block text-sm font-semibold" %>
-      <%= form.password_field rodauth.password_param, value: "", id: "password", autocomplete: rodauth.password_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md #{rodauth.field_error(rodauth.password_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 " : "border-gray-300 " }", aria: ({ invalid: true, describedby: "password_error_message" } if rodauth.field_error(rodauth.password_param)) %>
-      <%= content_tag(:span, rodauth.field_error(rodauth.password_param), class: "block mt-1 text-red-600 text-xs ", id: "password_error_message") if rodauth.field_error(rodauth.password_param) %>
-    </div>
-  <% end %>
+<div class="flex-1 flex items-center justify-center p-4">
+  <%= form_with url: rodauth.close_account_path, method: :post, data: { turbo: false }, class: "w-full max-w-sm" do |form| %>
+    <% if rodauth.close_account_requires_password? %>
+      <div class="mb-6">
+        <%= form.label "password", rodauth.password_label, class: "block text-sm font-semibold" %>
+        <%= form.password_field rodauth.password_param, value: "", id: "password", autocomplete: rodauth.password_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md #{rodauth.field_error(rodauth.password_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 " : "border-gray-300 " }", aria: ({ invalid: true, describedby: "password_error_message" } if rodauth.field_error(rodauth.password_param)) %>
+        <%= content_tag(:span, rodauth.field_error(rodauth.password_param), class: "block mt-1 text-red-600 text-xs ", id: "password_error_message") if rodauth.field_error(rodauth.password_param) %>
+      </div>
+    <% end %>
 
-  <%= form.submit rodauth.close_account_button, class: "btn w-full text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 " %>
-<% end %>
+    <%= form.submit rodauth.close_account_button, class: "btn w-full text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 " %>
+  <% end %>
+</div>

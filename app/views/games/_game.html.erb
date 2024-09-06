@@ -13,7 +13,7 @@
       </div>
     <% end %>
 
-    <div class= "p-2 mt-4 font-medium" >
+    <div class= "p-2 mt-2 font-medium" >
       Mines left: <%= board.mines_left %>
     </div>
 
@@ -40,6 +40,6 @@
   <% end %>
 <% end %>
 
-<% if game.finished? && rodauth.logged_in? %>
-  <%= link_to "Replay This Game", replay_game_path(game), class: "btn bg-gray-300 hover:bg-gray-400", data: {turbo_method: :post, turbo_frame: "_top"} %>
+<% if game.finished? %>
+  <%= link_to rodauth.logged_in? ? "Replay This Game" : "Login to Replay This Game", replay_game_path(game), class: "btn bg-gray-300 hover:bg-gray-400", data: {turbo_method: :post, turbo_frame: "_top"} %>
 <% end %>

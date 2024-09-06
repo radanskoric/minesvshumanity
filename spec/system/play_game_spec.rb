@@ -43,7 +43,7 @@ RSpec.describe "Play the game", type: :system do
     click_cell(5, 5)
 
     click_on "view previous games"
-    expect(page).to have_content('Finished games')
+    expect(page).to have_content('Games history')
 
     click_on "Game ##{simple_game.id}: Humanity won"
     expect(page).to have_content("Game ##{simple_game.id} (finished)")

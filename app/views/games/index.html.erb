@@ -1,7 +1,8 @@
-<p>
-  <%= link_to "Back to home page and current game", root_path, class: "text-indigo-600" %>
-</p>
+<% @previous.each do |previous_match| %>
+  <%= link_to "Previous round: #{previous_match.name}", previous_match, class: "text-indigo-600 font-bold text-xl m-4" %>
+<% end %>
 
-<h2 class="font-bold text-2xl m-4">Finished games</h1>
-
-<%= render "list", games: @games %>
+<div class="mt-6">
+  <h2 class="font-bold text-2xl m-4">Current round: <%= @match.name %></h1>
+  <%= render @match %>
+</div>
