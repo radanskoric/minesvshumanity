@@ -1,7 +1,7 @@
 <h2 class="font-bold text-2xl m-4">Game #<%= @game.id %> (<%= @game.finished? ? "finished" : "playing" %>)</h2>
 
 <% if @game.communal? %>
-  <%= link_to "Games history", games_path, class: "text-indigo-600 my-4" %>
+  <%= link_to "Games history", match_path(@game.match), class: "text-indigo-600 my-4" %>
 <% else %>
   <%= link_to "My games", my_games_path, class: "text-indigo-600 my-4" %>
 <% end %>

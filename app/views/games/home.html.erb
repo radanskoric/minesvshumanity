@@ -7,7 +7,7 @@
   If we collectively solve it that is one point for <b>Humanity</b>.
   If any one of us clicks on a mine, that is one point for <b>The Mines</b>.
   <% if @first_public %>
-    We're now on the second round. The <b>first round</b> finished with a <b class="text-red-800">complete defeat of Humanity</b>. Read about it
+    We're now on the second round. The <b>first round</b> finished with a <%= link_to "complete defeat of Humanity", @first_public, class:"text-red-800 font-bold" %>. Read about it
     <%= link_to "here", @first_public, class: "text-indigo-600" %>.
   <% end %>
   The new round features a fair start: games start with a starting area revealed.
