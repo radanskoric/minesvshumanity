@@ -3,7 +3,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["countdown"]
-  static values = { seconds: Number }
+  static values = {
+    seconds: Number,
+    nextGameUrl: { type: String, default: "/" }
+  }
 
   connect() {
     this.countdown = this.secondsValue
@@ -33,6 +36,6 @@ export default class extends Controller {
 
   refreshPage() {
     // TODO: move to refresh, see TODO.md
-    document.location = document.baseURI
+    Turbo.visit(this.nextGameUrlValue)
   }
 }

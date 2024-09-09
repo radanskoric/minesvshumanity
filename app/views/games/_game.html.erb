@@ -17,20 +17,16 @@
       Mines left: <%= board.mines_left %>
     </div>
 
-    <table class="board mx-auto mb-4">
+    <table class="board mx-auto mb-4" data-controller="board" data-board-url-value="<%=raw reveal_path(game, "-X-", "-Y-") %>">
       <% board.height.times do |y| %>
         <tr>
           <% board.width.times do |x| %>
             <% cell = board.cell(Minesweeper::Coordinate.new(x, y)) %>
             <% if cell && !(cell.is_a?(Minesweeper::Game::Marker)) %>
-              <td><%= cell_to_character(cell) %></td>
+              <%= cell_tag(cell) %>
             <% else %>
-              <td class="cell-hidden">
-                <% if game.play? %>
-                  <%= link_to(cell.to_s, reveal_path(game, x, y), data: {controller: "cell", turbo_method: :post}) %>
-                <% else %>
-                  <%= cell.to_s %>
-                <% end %>
+              <td class="ch">
+                <%= cell.to_s %>
               </td>
             <% end %>
           <% end %>

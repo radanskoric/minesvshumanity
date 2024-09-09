@@ -12,9 +12,11 @@ gem "sqlite3", "~> 1.4"
 gem "importmap-rails"
 gem "propshaft"
 
+gem "requestjs-rails"
 gem "stimulus-rails"
 gem "tailwindcss-rails"
 gem "turbo-rails"
+
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

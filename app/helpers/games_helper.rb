@@ -1,9 +1,11 @@
 module GamesHelper
-  def cell_to_character(cell)
+  def cell_tag(cell)
     if cell.is_a? Minesweeper::Board::Mine
-      "💣".html_safe
-    elsif !cell.neighbour_mines.zero?
-      cell.neighbour_mines
+      content_tag :td, "💣".html_safe
+    elsif cell.neighbour_mines.zero?
+      content_tag :td, ""
+    else
+      content_tag :td, cell.neighbour_mines, class: "c#{cell.neighbour_mines}"
     end
   end
 
