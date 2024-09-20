@@ -44,7 +44,7 @@ class GamesController < ApplicationController
 
   def update
     x, y = params.require([:x, :y])
-    mark_as_mine = params.fetch(:mark_as_mine, false)
+    mark_as_mine = params[:mark_as_mine]
     game = Game.find(params[:id])
     game_object = game.click!(x:, y:, mark_as_mine:)
 

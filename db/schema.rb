@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_03_185810) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_20_123601) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_03_185810) do
     t.integer "x", null: false
     t.integer "y", null: false
     t.datetime "created_at", null: false
-    t.boolean "mark_as_mine", default: false, null: false
+    t.boolean "mark_as_mine"
     t.index ["game_id"], name: "index_clicks_on_game_id"
   end
 
