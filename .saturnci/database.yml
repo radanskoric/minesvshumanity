@@ -1,0 +1,5 @@
+test:
+  database: saturn_test
+  adapter: litedb
+  encoding: unicode
+  database: /data/test.sqlite3

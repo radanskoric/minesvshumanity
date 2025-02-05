@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  saturn_test_app:
+    build:
+      context: ../
+      dockerfile: .saturnci/Dockerfile
+    image: ${SATURN_TEST_APP_IMAGE_URL}
+    volumes:
+      - ../:/code
+      - data:/data:delegated
+    depends_on:
+      - chrome
+    environment:
+      DOCKER_ENV: "true"
+      RAILS_ENV: test
+      SATURNCI_API_USERNAME: myuser
+      SATURNCI_API_PASSWORD: mypassword
+
+  chrome:
+    image: seleniarm/standalone-chromium
+    hostname: chrome
+    shm_size: 2g
+    ports:
+      - "4444:4444"
+
+volumes:
+  data:
