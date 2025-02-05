@@ -8,14 +8,27 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require "support/play_helpers"
 
-Capybara.register_driver :selenium_remote do |app|
+Capybara.register_driver :selenium_headless do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument("--headless")
+  options.add_argument("--no-sandbox")
+  options.add_argument("--disable-dev-shm-usage")
+  options.add_argument("--window-size=1400,1400")
+
   Capybara::Selenium::Driver.new(
     app,
     browser: :remote,
-    url: "http://chrome:4444/wd/hub"
+    url: "http://chrome:4444/",
+    options: options,
   )
 end
-Capybara.javascript_driver = :selenium_remote
+
+Capybara.default_driver = :selenium_headless
+Capybara.javascript_driver = :selenium_headless
+Capybara.server_host = "0.0.0.0"
+Capybara.server_port = '3000'
+Capybara.app_host = "http://#{IPSocket.getaddress(Socket.gethostname)}:3000"
+Capybara.always_include_port = true
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
