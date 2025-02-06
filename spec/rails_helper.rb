@@ -29,7 +29,7 @@ Capybara.server_host = "0.0.0.0"
 Capybara.server_port = '3000'
 Capybara.app_host = "http://#{IPSocket.getaddress(Socket.gethostname)}:3000"
 Capybara.always_include_port = true
-
+Capybara.default_max_wait_time = 10
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

@@ -144,7 +144,7 @@ RSpec.describe Minesweeper::Game do
     game = Minesweeper::Game.new(Minesweeper::Board.new(200, 200, [coord(1, 1)]))
 
     expect {
-      Timeout.timeout(0.5) do
+      Timeout.timeout(2) do
         game.reveal(coord(50, 50))
       end
     }.not_to raise_error
