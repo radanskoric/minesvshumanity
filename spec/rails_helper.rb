@@ -61,6 +61,10 @@ RSpec.configure do |config|
 
   config.include PlayHelpers, type: :system
 
+  config.before(:each, type: :system) do
+    driven_by :selenium_headless
+  end
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -89,4 +93,3 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
-
