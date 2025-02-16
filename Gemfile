@@ -14,7 +14,7 @@ gem "propshaft"
 
 gem "requestjs-rails"
 gem "stimulus-rails"
-gem "tailwindcss-rails"
+gem "tailwindcss-rails", "~> 3"
 gem "turbo-rails"
 
 
