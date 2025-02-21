@@ -60,6 +60,7 @@ RSpec.configure do |config|
   ]
 
   config.include PlayHelpers, type: :system
+  config.include ActiveJob::TestHelper, type: :system
 
   config.before(:each, type: :system) do
     driven_by :selenium_headless
@@ -92,4 +93,12 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Broadcasting runs through background jobs so we need to actually run them
+  # for collaborative js tests to work.
+  config.around(:each, type: :system) do |example|
+    perform_enqueued_jobs do
+      example.run
+    end
+  end
 end
