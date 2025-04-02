@@ -27,6 +27,7 @@ gem "bootsnap", require: false
 gem "stackprof"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "appsignal"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
