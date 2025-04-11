@@ -4,6 +4,9 @@ require "support/minesweeper_helpers"
 root_dir = File.expand_path("..", __dir__)
 $LOAD_PATH.unshift(root_dir) unless $LOAD_PATH.include?(root_dir)
 
+# Some headless browsers started warning about bad passwords, so test with a good one.
+TEST_PASSWORD = "KHWgdwjRGyjL*2FvB6"
+
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.include MinesweeperHelpers

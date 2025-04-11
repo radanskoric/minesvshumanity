@@ -1,4 +1,5 @@
 require 'rails_helper'
+require "humanizer_helper"
 
 RSpec.describe "Play a private game", type: :system do
   fixtures :matches, :accounts
@@ -25,13 +26,20 @@ RSpec.describe "Play a private game", type: :system do
     click_cell(mine.x, mine.y)
   end
 
+  def answer_humanizer_question!
+    question_id = find('#humanizer_question_id', visible: false).value #gets humanizer question id from example form above
+    humanizer_helper = HumanizerHelper.new(humanizer_question_id: question_id)
+    fill_in 'humanizer_answer', with: humanizer_helper.get_correct_humanizer_answer #fills in answer field from example above with the correct answer
+  end
+
   it "allows users to create private games after registering" do
     visit "/games/new"
 
     click_on "Create a New Account"
     fill_in "E-mail", with: "tester@example.com"
-    fill_in "Password", with: "lozinka!"
-    fill_in "Confirm Password", with: "lozinka!"
+    fill_in "Password", with: TEST_PASSWORD
+    fill_in "Confirm Password", with: TEST_PASSWORD
+    answer_humanizer_question!
     click_on "Create Account"
 
     create_a_private_game!
@@ -49,7 +57,7 @@ RSpec.describe "Play a private game", type: :system do
   it "allows creating a private game after logging in with existing user" do
     owner = accounts(:freddie)
     visit "/games/new"
-    login_with(email: owner.email, password: "password")
+    login_with(email: owner.email, password: TEST_PASSWORD)
 
     create_a_private_game!
 
@@ -64,7 +72,7 @@ RSpec.describe "Play a private game", type: :system do
   it "shows errors if game is invalid" do
     owner = accounts(:freddie)
     visit "/games/new"
-    login_with(email: owner.email, password: "password")
+    login_with(email: owner.email, password: TEST_PASSWORD)
 
     expect(page).to have_content("Create a new private game")
     fill_in "Width", with: "1000"
@@ -76,7 +84,7 @@ RSpec.describe "Play a private game", type: :system do
   it "allows to replay a communal game privately, after it's finished" do
     Game.create!(board: Board.create!( width: 10, height: 10, mines: [Mine.new(x: 2, y: 2)]), match: matches(:public))
     visit "/login"
-    login_with(email: accounts(:freddie).email, password: "password")
+    login_with(email: accounts(:freddie).email, password: TEST_PASSWORD)
 
     visit "/"
     expect(page).not_to have_content("Replay this game")
@@ -107,7 +115,7 @@ RSpec.describe "Play a private game", type: :system do
     context "when logged in as owner" do
       before do
         visit "/login"
-        login_with(email: owner.email, password: "password")
+        login_with(email: owner.email, password: TEST_PASSWORD)
         expect(page).to have_content("You have been logged in")
       end
 

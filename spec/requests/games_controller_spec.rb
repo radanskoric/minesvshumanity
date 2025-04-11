@@ -16,7 +16,7 @@ RSpec.describe "Games Controller" do
 
   describe "show" do
     it "doesn't allow viewing other's private game" do
-      post "/login", params: { email: accounts(:brian).email, password: "password"}
+      post "/login", params: { email: accounts(:brian).email, password: TEST_PASSWORD}
 
       get "/games/#{private_game.id}"
 
@@ -26,7 +26,7 @@ RSpec.describe "Games Controller" do
 
   describe '#replay' do
     it "doesn't allow replaying an unfinished game" do
-      post "/login", params: { email: account.email, password: "password" }
+      post "/login", params: { email: account.email, password: TEST_PASSWORD }
 
       post "/games/#{public_game.id}/replay"
 

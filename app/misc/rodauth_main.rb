@@ -1,4 +1,5 @@
 require "sequel/core"
+require "humanizer_helper"
 
 class RodauthMain < Rodauth::Rails::Auth
   configure do
@@ -45,9 +46,16 @@ class RodauthMain < Rodauth::Rails::Auth
     # Store password hash in a column instead of a separate table.
     account_password_hash_column :password_hash
 
+    before_create_account do
+      # Save where we were trying to get to before creating account
+      @saved_create_account_redirect = remove_session_value(login_redirect_session_key)      # Check Humanizer Captcha
+      params = @rails_controller_instance.params.permit!.to_h
+      humanizer_helper = HumanizerHelper.new(humanizer_answer: params[:humanizer_answer], humanizer_question_id: params[:humanizer_question_id])
+      throw_error_status(422, :humanizer_answer, "Incorrect answer, please try again") unless humanizer_helper.humanizer_correct_answer?
+    end
+
     # Redirect back to the page you were trying to access after creating an account.
     # See https://github.com/janko/rodauth-rails/discussions/300#discussioncomment-9498003
-    before_create_account { @saved_create_account_redirect = remove_session_value(login_redirect_session_key) }
     create_account_redirect { @saved_create_account_redirect || super() }
 
     # Set password when creating account instead of when verifying.

@@ -37,10 +37,10 @@
 
     <main class="container mx-auto mt-2 px-5 text-center font-sans">
        <% if notice %>
-         <div class="alert alert-success"><%= notice %></div>
+         <div class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg"><%= notice %></div>
        <% end %>
        <% if alert %>
-         <div class="alert alert-danger"><%= alert %></div>
+         <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg"><%= alert %></div>
        <% end %>
 
       <%= yield %>

@@ -5,6 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "ruby_lsp",
+      "request": "attach",
+      "name": "Attach to a debuggee"
+    },
+    {
       "type": "rdbg",
       "name": "Debug current file with rdbg",
       "request": "launch",

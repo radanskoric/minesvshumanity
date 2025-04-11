@@ -53,4 +53,5 @@ end
 
 gem "dockerfile-rails", ">= 1.6", :group => :development
 
+gem "humanizer", "~> 2.6"
 gem "rodauth-rails", "~> 1.15"

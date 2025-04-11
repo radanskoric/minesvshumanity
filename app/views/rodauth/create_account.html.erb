@@ -30,6 +30,15 @@
       <% end %>
     <% end %>
 
+    <% humanizer_helper = HumanizerHelper.new %>
+    <div class="mb-6">
+      <%= form.label :humanizer_answer, humanizer_helper.humanizer_question, class: "block text-sm font-semibold" %>
+      <%= form.text_field :humanizer_answer, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md #{rodauth.field_error(:humanizer_answer) ? "border-red-600 focus:ring-red-600 focus:border-red-600 " : "border-gray-300 " }", aria: ({ invalid: true, describedby: "humanizer_error_message" } if rodauth.field_error(:humanizer_answer)) %>
+      <%= form.hidden_field :humanizer_question_id, value: humanizer_helper.humanizer_question_id %>
+      <span class="block mt-1 text-gray-600 text-xs">Please answer this question to verify you're human</span>
+      <%= content_tag(:span, rodauth.field_error(:humanizer_answer), class: "block mt-1 text-red-600 text-xs", id: "humanizer_error_message") if rodauth.field_error(:humanizer_answer) %>
+    </div>
+
     <%= form.submit rodauth.create_account_button, class: "btn w-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 " %>
   <% end %>
 </div>
